@@ -47,10 +47,6 @@
             z-index: 1000;
         }
 
-        header .nav-links {
-            display: flex;
-        }
-
         header nav {
             display: flex;
             justify-content: space-between;
@@ -61,7 +57,8 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--dark-color);
+            color: var(--primary-color); /* Changed to primary-color for blue text */
+            text-decoration: none; /* Ensure it's not underlined */
         }
 
         a {
@@ -73,6 +70,11 @@
             list-style: none;
         }
 
+        /* Default (Desktop) Navigation Links */
+        .nav-links {
+            display: flex; /* Ensure links are in a row on desktop */
+        }
+
         header nav ul li a {
             padding: 10px 15px;
             color: var(--dark-color);
@@ -82,6 +84,54 @@
 
         header nav ul li a:hover {
             color: var(--primary-color);
+        }
+
+        /* Hamburger Menu Icon */
+        .hamburger {
+            display: none; /* Hidden by default on desktop */
+            cursor: pointer;
+            width: 30px; /* Width of the icon container */
+            height: 20px; /* Height of the icon container */
+            position: relative;
+            z-index: 1002; /* Ensure it's above other content */
+            transition: transform 0.3s ease-out;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--dark-color);
+            border-radius: 2px;
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hamburger span:nth-child(1) {
+            top: 0;
+        }
+
+        .hamburger span:nth-child(2) {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .hamburger span:nth-child(3) {
+            bottom: 0;
+        }
+
+        /* Animation for hamburger to close icon */
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
         }
 
 
@@ -147,8 +197,9 @@
 
         .product-card img {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: auto; /* Changed to auto to display full image */
+            max-height: 250px; /* Optional: Set a max height if images are very tall */
+            object-fit: contain; /* Changed to contain to display full image without cropping */
             border-radius: 5px;
             margin-bottom: 1rem;
         }
@@ -236,13 +287,14 @@
         }
 
         /* Form Styling */
-        #interestForm label {
+        #combinedInterestForm label {
             display: block;
             margin: 15px 0 5px;
             font-weight: 600;
         }
 
-        #interestForm input {
+        #combinedInterestForm input,
+        #combinedInterestForm textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
@@ -250,7 +302,12 @@
             font-size: 1rem;
         }
 
-        #interestForm button {
+        #combinedInterestForm textarea {
+            min-height: 100px;
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        #combinedInterestForm button {
             width: 100%;
             margin-top: 20px;
             padding: 15px;
@@ -264,7 +321,7 @@
             transition: background-color 0.3s;
         }
 
-        #interestForm button:hover {
+        #combinedInterestForm button:hover {
             background-color: #0056b3;
         }
 
@@ -279,8 +336,42 @@
                 font-size: 2.5rem;
             }
 
+            header nav {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px 20px;
+            }
+
+            .hamburger {
+                display: block; /* Show hamburger icon on mobile */
+            }
+
             .nav-links {
-                display: none; /* Simple hiding for mobile, could be replaced with a hamburger menu */
+                display: none; /* Hide navigation links by default on mobile */
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--white-color);
+                box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+                position: absolute;
+                top: 70px;
+                left: 0;
+                padding: 20px 0;
+                transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+                transform: translateY(-100%);
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .nav-links.active {
+                display: flex; /* Show when active */
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+                text-align: center;
             }
 
             .product-grid {
@@ -298,8 +389,13 @@
 
     <header>
         <nav class="container">
-            <a href="#" class="logo">Linkaro</a>
-            <ul class="nav-links">
+            <a href="#" class="logo">Linkaro.si</a> <!-- Besedilni logotip -->
+            <div class="hamburger" id="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="#home">Domov</a></li>
                 <li><a href="trgovina.html" target="_blank">Trgovina</a></li>
                 <li><a href="#footer">Kontakt</a></li>
@@ -324,19 +420,19 @@
                 <h2>Naši izdelki</h2>
                 <div class="product-grid">
                     <div class="product-card">
-                        <img src="https://placehold.co/300x200/cccccc/333333?text=NFC+Nalepka" alt="NFC Nalepka">
-                        <h3>Paket NFC nalepk (5x)</h3>
-                        <p>Vsestranske lepljive nalepke. Popolne za plakate, menije ali katero koli ravno površino.</p>
+                        <img src="googleblck.jpg" alt="Google Review Tablica Črna">
+                        <h3>Tap za Google Oceno Tablica (Črna)</h3>
+                        <p>Enostavno pridobite več Google ocen z dotikom. Idealno za podjetja.</p>
                         <button class="interest-btn">Zanima me</button>
                     </div>
                     <div class="product-card">
-                        <img src="https://placehold.co/300x200/cccccc/333333?text=NFC+Obesek" alt="NFC Obesek">
-                        <h3>NFC obesek za ključe</h3>
-                        <p>Vzdržljiv in eleganten. Pritrdite ga na ključe za takojšnje digitalno deljenje na poti.</p>
+                        <img src="googlewht.jpg" alt="Google Review Tablica Bela">
+                        <h3>Tap za Google Oceno Tablica (Bela)</h3>
+                        <p>Dizajnirana za stil in funkcionalnost. Pridobite ocene s preprostim dotikom.</p>
                         <button class="interest-btn">Zanima me</button>
                     </div>
                     <div class="product-card">
-                        <img src="https://placehold.co/300x200/cccccc/333333?text=NFC+Vizitka" alt="NFC Vizitka">
+                        <img src="https://placehold.co/300x200.png?text=NFC+Business+Card" alt="NFC Vizitka">
                         <h3>NFC vizitka</h3>
                         <p>Zadnja vizitka, ki jo boste kdaj potrebovali. Dotaknite se za takojšnjo delitev vaših kontaktnih podatkov.</p>
                         <button class="interest-btn">Zanima me</button>
@@ -346,20 +442,22 @@
         </section>
     </main>
 
-    <footer id="footer">
+    <footer>
         <div class="container">
-            <p>&copy; 2025 Linkaro. Vse pravice pridržane.</p>
-            <p>E-pošta: info@linkaro.si | Telefon: +386 12 345 678</p>
+            <p>&copy; 2025 Linkaro.si Vse pravice pridržane.</p>
+            <p>E-pošta: linkaroteam@gmail.com | Telefon: +386 40 846 344</p>
             </div>
     </footer>
 
     <div id="interestModal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
-            <div id="form-container">
-                <h2>Izrazite svoje zanimanje</h2>
-                <p>Vrnili se vam bomo z več podrobnostmi in možnostmi nakupa.</p>
-                <form id="interestForm">
+            
+            <!-- Combined Form for Contact Info and Question -->
+            <div id="combined-form-container">
+                <h2>Izrazite svoje zanimanje in vprašajte</h2>
+                <p>Vnesite svoje podatke in nam povejte, kaj vas zanima.</p>
+                <form id="combinedInterestForm">
                     <label for="fullName">Polno ime (neobvezno)</label>
                     <input type="text" id="fullName" name="fullName" placeholder="Janez Novak">
 
@@ -369,40 +467,65 @@
                     <label for="phone">Mobilni telefon (obvezno)</label>
                     <input type="tel" id="phone" name="phone" placeholder="041 123 456" required>
 
-                    <button type="submit" id="submitBtn">Pošlji povpraševanje</button>
+                    <label for="userQuestion">Kaj vas zanima ali imate vprašanje?</label>
+                    <textarea id="userQuestion" name="userQuestion" rows="5" placeholder="Sem zainteresiran za ... / Kakšna je razlika med ...?" required></textarea>
+                    
+                    <button type="submit" id="submitCombinedBtn">Pošlji povpraševanje</button>
                 </form>
             </div>
+
+            <!-- Final Thank You Message (Initially Hidden) -->
             <div id="thank-you-message" style="display: none;">
                 <h2>Hvala! 🙏</h2>
-                <p>Prejeli smo vaše povpraševanje in vas bomo kmalu kontaktirali.</p>
+                <p>Prejeli smo vaše povpraševanje in vprašanje in vas bomo kmalu kontaktirali.</p>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu elements
+            const hamburger = document.getElementById('hamburger-menu');
+            const navLinks = document.getElementById('nav-links');
+
             // Modal elements
             const modal = document.getElementById('interestModal');
             const closeBtn = document.querySelector('.close-btn');
             const interestBtns = document.querySelectorAll('.interest-btn');
 
-            // Form elements
-            const form = document.getElementById('interestForm');
-            const formContainer = document.getElementById('form-container');
+            // Form containers and messages
+            const combinedFormContainer = document.getElementById('combined-form-container');
             const thankYouMessage = document.getElementById('thank-you-message');
             
+            // Form
+            const combinedInterestForm = document.getElementById('combinedInterestForm');
+
             // --- IMPORTANT: REPLACE WITH YOUR FORMSPREE ENDPOINT ---
-            const formspreeUrl = 'https://formspree.io/f/your_unique_form_id'; // Placeholder URL
+            const formspreeUrl = 'https://formspree.io/f/xjkogezr'; 
+
+            // --- Mobile Menu Logic ---
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.classList.toggle('active'); // Toggle active class for hamburger icon animation
+            });
+
+            // Close mobile menu when a link is clicked
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.classList.remove('active'); // Reset hamburger icon
+                });
+            });
 
             // --- Modal Logic ---
 
             // Function to open the modal
             const openModal = () => {
                 modal.style.display = 'block';
-                // Reset form view
-                formContainer.style.display = 'block';
+                // Reset to initial state (show combined form, hide thank you)
+                combinedFormContainer.style.display = 'block';
                 thankYouMessage.style.display = 'none';
-                form.reset();
+                combinedInterestForm.reset(); // Reset the form fields
             };
 
             // Function to close the modal
@@ -425,15 +548,18 @@
                 }
             });
 
-            // --- Form Submission Logic ---
-            form.addEventListener('submit', async (e) => {
+            // --- Form Submission Logic (Combined Form) ---
+            combinedInterestForm.addEventListener('submit', async (e) => {
                 e.preventDefault(); // Prevent default form submission
 
-                const submitBtn = document.getElementById('submitBtn');
+                const submitBtn = document.getElementById('submitCombinedBtn');
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Pošiljam...'; // Sending...
 
-                const formData = new FormData(form);
+                const formData = new FormData(combinedInterestForm);
+
+                // Add a subject for Formspree to distinguish this submission
+                formData.append('_subject', 'Povpraševanje in vprašanje uporabnika Linkaro'); 
 
                 try {
                     const response = await fetch(formspreeUrl, {
@@ -445,27 +571,24 @@
                     });
 
                     if (response.ok) {
-                        // Success! Show thank you message and hide form
-                        formContainer.style.display = 'none';
+                        // Success! Hide combined form and show thank you message
+                        combinedFormContainer.style.display = 'none';
                         thankYouMessage.style.display = 'block';
                     } else {
                         // Handle server-side errors
                         const responseData = await response.json();
                         if (responseData.errors) {
-                            // Using a custom message box instead of alert()
                             showMessageBox(responseData.errors.map(error => error.message).join(", "));
                         } else {
-                            showMessageBox('Ups! Prišlo je do težave pri oddaji obrazca.'); // Oops! There was a problem submitting your form.
+                            showMessageBox('Ups! Prišlo je do težave pri oddaji obrazca.');
                         }
                     }
                 } catch (error) {
-                    // Handle network errors
-                    console.error('Submission error:', error);
-                    showMessageBox('Prišlo je do napake. Poskusite znova.'); // An error occurred. Please try again.
+                    console.error('Submission error (Combined Form):', error);
+                    showMessageBox('Prišlo je do napake pri oddaji obrazca. Poskusite znova.');
                 } finally {
-                    // Re-enable submit button
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Pošlji povpraševanje'; // Send Inquiry
+                    submitBtn.textContent = 'Pošlji povpraševanje';
                 }
             });
 
