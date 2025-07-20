@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkaro - Pametne NFC Oznake</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styling & Variables */
+        :root {
+            --primary-color: #007bff;
+            --dark-color: #1a1a1a;
+            --light-color: #f4f4f4;
+            --white-color: #ffffff;
+            --font-family: 'Poppins', sans-serif;
+            --container-width: 1100px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            background: var(--white-color);
+            color: var(--dark-color);
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: var(--container-width);
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: var(--white-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .nav-links {
+            display: flex;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        header nav ul li a {
+            padding: 10px 15px;
+            color: var(--dark-color);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+
+        /* Hero Section */
+        #home {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        #home h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 4rem;
+        }
+
+        .explanation {
+            max-width: 800px;
+            margin: auto;
+            padding: 2rem;
+            background: var(--light-color);
+            border-radius: 8px;
+        }
+
+        .explanation h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        /* Shop Section */
+        #shop {
+            padding: 4rem 0;
+            background: var(--light-color);
+        }
+
+        #shop h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--white-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            text-align: center;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .product-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card p {
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .interest-btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--white-color);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .interest-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            position: relative;
+            animation: slide-down 0.4s ease-out;
+        }
+
+        @keyframes slide-down {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+        }
+
+        /* Form Styling */
+        #interestForm label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: 600;
+        }
+
+        #interestForm input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        #interestForm button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #interestForm button:hover {
+            background-color: #0056b3;
+        }
+
+        #thank-you-message {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #home h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none; /* Simple hiding for mobile, could be replaced with a hamburger menu */
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">Linkaro</a>
+            <ul class="nav-links">
+                <li><a href="#home">Domov</a></li>
+                <li><a href="trgovina.html" target="_blank">Trgovina</a></li>
+                <li><a href="#footer">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="container">
+            <div class="hero-content">
+                <h1>Odklenite digitalni svet z dotikom.</h1>
+                <p class="subtitle">Linkaro vam prinaša prihodnost povezljivosti z zmogljivimi, enostavnimi NFC oznakami.</p>
+            </div>
+            <div class="explanation">
+                <h2>Kaj so NFC oznake? 🤔</h2>
+                <p>NFC (Near Field Communication) oznake so majhni, pasivni čipi, ki lahko shranjujejo informacije. Ko se pametni telefon približa, lahko sprožijo dejanja, kot so odpiranje spletne strani, deljenje kontaktnih podatkov ali povezovanje z Wi-Fi – aplikacija ni potrebna.</p>
+            </div>
+        </section>
+
+        <section id="shop">
+            <div class="container">
+                <h2>Naši izdelki</h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="https://placehold.co/300x200/cccccc/333333?text=NFC+Nalepka" alt="NFC Nalepka">
+                        <h3>Paket NFC nalepk (5x)</h3>
+                        <p>Vsestranske lepljive nalepke. Popolne za plakate, menije ali katero koli ravno površino.</p>
+                        <button class="interest-btn">Zanima me</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://placehold.co/300x200/cccccc/333333?text=NFC+Obesek" alt="NFC Obesek">
+                        <h3>NFC obesek za ključe</h3>
+                        <p>Vzdržljiv in eleganten. Pritrdite ga na ključe za takojšnje digitalno deljenje na poti.</p>
+                        <button class="interest-btn">Zanima me</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://placehold.co/300x200/cccccc/333333?text=NFC+Vizitka" alt="NFC Vizitka">
+                        <h3>NFC vizitka</h3>
+                        <p>Zadnja vizitka, ki jo boste kdaj potrebovali. Dotaknite se za takojšnjo delitev vaših kontaktnih podatkov.</p>
+                        <button class="interest-btn">Zanima me</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="container">
+            <p>&copy; 2025 Linkaro. Vse pravice pridržane.</p>
+            <p>E-pošta: info@linkaro.si | Telefon: +386 12 345 678</p>
+            </div>
+    </footer>
+
+    <div id="interestModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="form-container">
+                <h2>Izrazite svoje zanimanje</h2>
+                <p>Vrnili se vam bomo z več podrobnostmi in možnostmi nakupa.</p>
+                <form id="interestForm">
+                    <label for="fullName">Polno ime (neobvezno)</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Janez Novak">
+
+                    <label for="email">E-poštni naslov (obvezno)</label>
+                    <input type="email" id="email" name="email" placeholder="vas@email.com" required>
+
+                    <label for="phone">Mobilni telefon (obvezno)</label>
+                    <input type="tel" id="phone" name="phone" placeholder="041 123 456" required>
+
+                    <button type="submit" id="submitBtn">Pošlji povpraševanje</button>
+                </form>
+            </div>
+            <div id="thank-you-message" style="display: none;">
+                <h2>Hvala! 🙏</h2>
+                <p>Prejeli smo vaše povpraševanje in vas bomo kmalu kontaktirali.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal elements
+            const modal = document.getElementById('interestModal');
+            const closeBtn = document.querySelector('.close-btn');
+            const interestBtns = document.querySelectorAll('.interest-btn');
+
+            // Form elements
+            const form = document.getElementById('interestForm');
+            const formContainer = document.getElementById('form-container');
+            const thankYouMessage = document.getElementById('thank-you-message');
+            
+            // --- IMPORTANT: REPLACE WITH YOUR FORMSPREE ENDPOINT ---
+            const formspreeUrl = 'https://formspree.io/f/your_unique_form_id'; // Placeholder URL
+
+            // --- Modal Logic ---
+
+            // Function to open the modal
+            const openModal = () => {
+                modal.style.display = 'block';
+                // Reset form view
+                formContainer.style.display = 'block';
+                thankYouMessage.style.display = 'none';
+                form.reset();
+            };
+
+            // Function to close the modal
+            const closeModal = () => {
+                modal.style.display = 'none';
+            };
+
+            // Event listeners for all "I'm Interested" buttons
+            interestBtns.forEach(btn => {
+                btn.addEventListener('click', openModal);
+            });
+
+            // Event listener for the close button
+            closeBtn.addEventListener('click', closeModal);
+
+            // Close modal if user clicks outside of the modal content
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- Form Submission Logic ---
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent default form submission
+
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Pošiljam...'; // Sending...
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(formspreeUrl, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Success! Show thank you message and hide form
+                        formContainer.style.display = 'none';
+                        thankYouMessage.style.display = 'block';
+                    } else {
+                        // Handle server-side errors
+                        const responseData = await response.json();
+                        if (responseData.errors) {
+                            // Using a custom message box instead of alert()
+                            showMessageBox(responseData.errors.map(error => error.message).join(", "));
+                        } else {
+                            showMessageBox('Ups! Prišlo je do težave pri oddaji obrazca.'); // Oops! There was a problem submitting your form.
+                        }
+                    }
+                } catch (error) {
+                    // Handle network errors
+                    console.error('Submission error:', error);
+                    showMessageBox('Prišlo je do napake. Poskusite znova.'); // An error occurred. Please try again.
+                } finally {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Pošlji povpraševanje'; // Send Inquiry
+                }
+            });
+
+            // Custom message box function (replaces alert)
+            function showMessageBox(message) {
+                const messageBox = document.createElement('div');
+                messageBox.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                    z-index: 1002;
+                    text-align: center;
+                    font-family: var(--font-family);
+                    max-width: 300px;
+                    width: 90%;
+                `;
+                messageBox.innerHTML = `
+                    <p style="margin-bottom: 15px;">${message}</p>
+                    <button style="
+                        background-color: var(--primary-color);
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    " onclick="this.parentNode.remove()">V redu</button>
+                `;
+                document.body.appendChild(messageBox);
+            }
+        });
+    </script>
+</body>
+</html>
